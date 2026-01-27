@@ -7,7 +7,7 @@ export 'package:flutter/services.dart';
 export 'package:flutter_bloc/flutter_bloc.dart';
 
 export 'adapters/adapters.dart';
-export 'enums/enums.dart';
+export 'blocs/blocs.dart';
 export 'errors/errors.dart';
 export 'http/http.dart';
 export 'interfaces/interfaces.dart';

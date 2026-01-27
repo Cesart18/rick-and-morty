@@ -1,39 +1,33 @@
 part of 'package:rick_and_morty/src/presentation/home/base/home_page.dart';
 
-enum _HomeStatus { 
-  initial, 
-  loading, 
-  success, 
-  failure;
-
-  bool get isInitial => this == _HomeStatus.initial;
-  bool get isLoading => this == _HomeStatus.loading;
-  bool get isSuccess => this == _HomeStatus.success;
-  bool get isFailure => this == _HomeStatus.failure;
-}
-
-
 /// {@template home_state}
 /// _HomeState description
 /// {@endtemplate}
 class _HomeState extends Equatable {
   /// {@macro home_state}
   const _HomeState({
-    this.status = _HomeStatus.initial,
+    this.searchFormInput = const SearchFormInput.pure(),
+    this.debouncedSearchValue,
   });
 
-  /// Status of the state
-  final _HomeStatus status;
+  final SearchFormInput searchFormInput;
+
+  final String? debouncedSearchValue;
 
   @override
-  List<Object> get props => [status];
+  List<Object?> get props => [searchFormInput, debouncedSearchValue];
 
-  /// Creates a copy of the current _HomeState with property changes
+  /// Creates a copy of the current _HomeState with property change
   _HomeState copyWith({
-    _HomeStatus? status,
+    SearchFormInput? searchFormInput,
+    String? debouncedSearchValue,
+    bool clearDebouncedValue = false,
   }) {
     return _HomeState(
-      status: status ?? this.status,
+      searchFormInput: searchFormInput ?? this.searchFormInput,
+      debouncedSearchValue: clearDebouncedValue
+          ? null
+          : debouncedSearchValue ?? this.debouncedSearchValue,
     );
   }
 }

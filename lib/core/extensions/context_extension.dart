@@ -1,4 +1,3 @@
-import 'package:rick_and_morty/core/theme/extended_text_theme.dart';
 import 'package:rick_and_morty/core/ui.dart';
 
 /// A set of extensions for [BuildContext] objects.

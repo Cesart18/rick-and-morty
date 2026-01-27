@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:rick_and_morty/core/foundation.dart';
 import 'package:rick_and_morty/src/domain/domain.dart';
 import 'package:rick_and_morty/src/infrastructure/data_sources/character_api/character_api_rest_endpoints.dart';
@@ -10,13 +11,15 @@ class CharacterApiRest implements ICharacterApi {
 
   @override
   Future<Result<PageInfo<Character>, ServerError>> getCharacters(
-    GetCharactersParams param,
-  ) async {
+    GetCharactersParams param, {
+    CancelToken? cancelToken,
+  }) async {
     final request = GetCharactersRequestModel.fromEntity(param);
     try {
       final response = await _client.get<DataMap>(
         CharacterApiRestEndpoints.characters,
         queryParameters: request.toQueryParameters(),
+        cancelToken: cancelToken,
       );
 
       final pageInfo = PageInfoDtoModel<Character>.fromMap(

@@ -27,8 +27,14 @@ class CharacterDtoModel extends Character {
     final episodes = map['episode'] as List<dynamic>? ?? [];
     final url = map['url'] as String? ?? '';
 
-    final originValue = map['origin'] as DataMap? ?? {};
-    final locationValue = map['location'] as DataMap? ?? {};
+    final originRaw = map['origin'];
+    final locationRaw = map['location'];
+
+    final originValue = originRaw is DataMap ? originRaw : <String, dynamic>{};
+    final locationValue = locationRaw is DataMap
+        ? locationRaw
+        : <String, dynamic>{};
+
     final origin = CharacterResourceDtoModel.fromMap(originValue);
     final location = CharacterResourceDtoModel.fromMap(locationValue);
 

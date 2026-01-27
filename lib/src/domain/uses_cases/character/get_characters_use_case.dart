@@ -1,19 +1,18 @@
+import 'package:dio/dio.dart';
 import 'package:rick_and_morty/core/foundation.dart';
 import 'package:rick_and_morty/src/domain/domain.dart';
 
-class GetCharactersUseCase
-    implements
-        UseCaseWithParams<
-          Result<PageInfo<Character>, AppError>,
-          GetCharactersParams
-        > {
+class GetCharactersUseCase {
   GetCharactersUseCase({required ICharacterRepository characterRepository})
     : _characterRepository = characterRepository;
 
   final ICharacterRepository _characterRepository;
 
-  @override
   Future<Result<PageInfo<Character>, AppError>> execute(
-    GetCharactersParams parameters,
-  ) => _characterRepository.getCharacters(parameters);
+    GetCharactersParams parameters, {
+    CancelToken? cancelToken,
+  }) => _characterRepository.getCharacters(
+    parameters,
+    cancelToken: cancelToken,
+  );
 }

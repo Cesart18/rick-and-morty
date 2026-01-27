@@ -1,11 +1,20 @@
 import 'package:rick_and_morty/core/foundation.dart';
 import 'package:rick_and_morty/core/ui.dart';
+import 'package:rick_and_morty/src/domain/domain.dart';
 
 part 'package:rick_and_morty/src/presentation/home/bloc/home_bloc.dart';
 part 'package:rick_and_morty/src/presentation/home/bloc/home_event.dart';
 part 'package:rick_and_morty/src/presentation/home/bloc/home_state.dart';
 
 part 'package:rick_and_morty/src/presentation/home/base/home_body.dart';
+part '../widgets/card/character_card.dart';
+part '../widgets/card/character_image.dart';
+part '../widgets/card/character_info.dart';
+
+part '../widgets/custom_app_bar.dart';
+part '../constants/home_strings.dart';
+
+part 'listeners/seach_input_listener.dart';
 
 /// {@template home_page}
 /// A description for HomePage
@@ -25,10 +34,7 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => _HomeBloc(),
-      child: Scaffold(
-        appBar: AppBar(title: const Text('Home')),
-        body: const _HomeView(),
-      ),
+      child: const Scaffold(appBar: CustomAppBar(), body: _HomeView()),
     );
   }
 }
@@ -45,6 +51,9 @@ class _HomeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const _HomeBody();
+    return MultiBlocListener(
+      listeners: [_SearchInputListener()],
+      child: const _HomeBody(),
+    );
   }
 }

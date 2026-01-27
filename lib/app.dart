@@ -1,7 +1,9 @@
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 import 'package:rick_and_morty/config.dart';
+import 'package:rick_and_morty/core/foundation.dart';
 import 'package:rick_and_morty/core/ui.dart';
+import 'package:rick_and_morty/src/domain/domain.dart';
 import 'package:rick_and_morty/src/router/app_router.dart';
 
 class App extends StatelessWidget {
@@ -24,5 +26,15 @@ class App extends StatelessWidget {
 }
 
 List<SingleChildWidget> _dependencies(Config config) {
-  return [RepositoryProvider.value(value: config.characterRepository)];
+  return [
+    RepositoryProvider.value(value: config.characterRepository),
+
+    BlocProvider(
+      create: (context) => CharactersBloc(
+        useCase: GetCharactersUseCase(
+          characterRepository: config.characterRepository,
+        ),
+      ),
+    ),
+  ];
 }
