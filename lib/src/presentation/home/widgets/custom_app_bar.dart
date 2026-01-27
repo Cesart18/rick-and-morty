@@ -75,11 +75,16 @@ class _CustomAppBarState extends State<CustomAppBar>
                   ),
                 );
               },
-              child: Text(
-                _HomeStrings.appBarTitle,
-                style: context.textTheme.titleLarge?.copyWith(
-                  color: ColorValues.textPrimary(context),
-                  fontWeight: FontWeight.w600,
+              child: GestureDetector(
+                onTap: () => context.read<_HomeBloc>().add(
+                  const _ScrollToTopRequested(),
+                ),
+                child: Text(
+                  _HomeStrings.appBarTitle,
+                  style: context.textTheme.titleLarge?.copyWith(
+                    color: ColorValues.textPrimary(context),
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
               ),
             ),

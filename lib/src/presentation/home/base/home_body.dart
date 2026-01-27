@@ -35,13 +35,18 @@ class _HomeBodyState extends State<_HomeBody> {
   }
 
   void _fetchNextPageIfNeeded() {
-    final bloc = context.read<CharactersBloc>();
-    final state = bloc.state;
+    final charactersBloc = context.read<CharactersBloc>();
+    final homeState = context.read<_HomeBloc>().state;
+    final state = charactersBloc.state;
 
-    // Only fetch if not loading and has more pages
     final isLoading = state.status.isWaiting || state.status.isWaitingMore;
     if (!isLoading && state.hasMore) {
-      bloc.add(const CharactersNextPageRequested());
+      charactersBloc.add(
+        CharactersNextPageRequested(
+          status: homeState.selectedStatus,
+          gender: homeState.selectedGender,
+        ),
+      );
     }
   }
 
@@ -49,53 +54,97 @@ class _HomeBodyState extends State<_HomeBody> {
     if (!_scrollController.hasClients) return false;
     final maxScroll = _scrollController.position.maxScrollExtent;
     final currentScroll = _scrollController.offset;
-    // Trigger when 80% of the list is scrolled
+
     return currentScroll >= maxScroll * 0.8;
+  }
+
+  void _scrollToTop() {
+    if (_scrollController.hasClients) {
+      _scrollController.animateTo(
+        0,
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeOut,
+      );
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<CharactersBloc, CharactersState>(
-      builder: (context, state) {
-        if (state.status.isWaiting) {
-          return const Center(child: CircularProgressIndicator());
-        }
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: WidthValues.spacingLg),
+      child: Column(
+        spacing: WidthValues.spacing2xl,
+        children: [
+          const _CharacterFilters(),
 
-        return CustomScrollView(
-          controller: _scrollController,
-          slivers: [
-            SliverPadding(
-              padding: EdgeInsets.symmetric(horizontal: WidthValues.spacingLg),
-              sliver: SliverGrid(
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  childAspectRatio: 0.75,
-                  mainAxisSpacing: WidthValues.spacingLg,
-                  crossAxisSpacing: WidthValues.spacing2Md,
-                ),
-                delegate: SliverChildBuilderDelegate((context, index) {
-                  final character = state.characters[index];
-                  return _CharacterCard(character: character);
-                }, childCount: state.characters.length),
+          Expanded(
+            child: BlocListener<_HomeBloc, _HomeState>(
+              listenWhen: (previous, current) =>
+                  previous.scrollToTopTimestamp !=
+                      current.scrollToTopTimestamp &&
+                  current.scrollToTopTimestamp != null,
+              listener: (context, state) => _scrollToTop(),
+
+              child: BlocBuilder<CharactersBloc, CharactersState>(
+                buildWhen: (previous, current) =>
+                    previous.status != current.status ||
+                    previous.characters != current.characters,
+                builder: (context, state) {
+                  if (state.status.isWaiting) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+
+                  if (state.hasError || state.isEmpty) {
+                    return Center(
+                      child: Text(
+                        _HomeStrings.noResultsFound,
+                        style: context.textTheme.bodyLarge?.copyWith(
+                          color: ColorValues.textSecondary(context),
+                        ),
+                      ),
+                    );
+                  }
+
+                  return CustomScrollView(
+                    controller: _scrollController,
+                    slivers: [
+                      SliverGrid(
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          childAspectRatio: 0.75,
+                          mainAxisSpacing: WidthValues.spacingLg,
+                          crossAxisSpacing: WidthValues.spacing2Md,
+                        ),
+                        delegate: SliverChildBuilderDelegate((context, index) {
+                          final character = state.characters[index];
+
+                          return _CharacterCard(character: character);
+                        }, childCount: state.characters.length),
+                      ),
+
+                      if (state.status.isWaitingMore)
+                        const SliverToBoxAdapter(
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(vertical: 16),
+                            child: Center(
+                              child: SizedBox(
+                                width: 24,
+                                height: 24,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                    ],
+                  );
+                },
               ),
             ),
-            // Loading indicator at the bottom
-            if (state.status.isWaitingMore)
-              const SliverToBoxAdapter(
-                child: Padding(
-                  padding: EdgeInsets.symmetric(vertical: 16),
-                  child: Center(
-                    child: SizedBox(
-                      width: 24,
-                      height: 24,
-                      child: CircularProgressIndicator(strokeWidth: 2),
-                    ),
-                  ),
-                ),
-              ),
-          ],
-        );
-      },
+          ),
+        ],
+      ),
     );
   }
 }

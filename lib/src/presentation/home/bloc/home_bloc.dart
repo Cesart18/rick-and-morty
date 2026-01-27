@@ -4,6 +4,9 @@ class _HomeBloc extends Bloc<_HomeEvent, _HomeState> {
   _HomeBloc() : super(const _HomeState()) {
     on<SearchFormInputChanged>(_onSearchFormInputChanged);
     on<_SearchDebounceCompleted>(_onSearchDebounceCompleted);
+    on<_ScrollToTopRequested>(_onScrollToTopRequested);
+    on<_StatusSelected>(_onStatusSelected);
+    on<_GenderSelected>(_onGenderSelected);
   }
 
   Timer? _debounceTimer;
@@ -31,6 +34,27 @@ class _HomeBloc extends Bloc<_HomeEvent, _HomeState> {
     Emitter<_HomeState> emit,
   ) {
     emit(state.copyWith(debouncedSearchValue: event.value));
+  }
+
+  void _onScrollToTopRequested(
+    _ScrollToTopRequested event,
+    Emitter<_HomeState> emit,
+  ) {
+    emit(state.copyWith(scrollToTopTimestamp: DateTime.now()));
+  }
+
+  void _onStatusSelected(_StatusSelected event, Emitter<_HomeState> emit) {
+    emit(state.copyWith(
+      selectedStatus: event.status,
+      clearSelectedStatus: event.status == null,
+    ));
+  }
+
+  void _onGenderSelected(_GenderSelected event, Emitter<_HomeState> emit) {
+    emit(state.copyWith(
+      selectedGender: event.gender,
+      clearSelectedGender: event.gender == null,
+    ));
   }
 
   @override

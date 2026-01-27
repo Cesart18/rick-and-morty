@@ -8,26 +8,48 @@ class _HomeState extends Equatable {
   const _HomeState({
     this.searchFormInput = const SearchFormInput.pure(),
     this.debouncedSearchValue,
+    this.scrollToTopTimestamp,
+    this.selectedStatus,
+    this.selectedGender,
   });
 
   final SearchFormInput searchFormInput;
 
   final String? debouncedSearchValue;
 
-  @override
-  List<Object?> get props => [searchFormInput, debouncedSearchValue];
+  final DateTime? scrollToTopTimestamp;
+  final CharacterStatus? selectedStatus;
+  final CharacterGender? selectedGender;
 
-  /// Creates a copy of the current _HomeState with property change
+  @override
+  List<Object?> get props => [
+    searchFormInput,
+    debouncedSearchValue,
+    scrollToTopTimestamp,
+    selectedStatus,
+    selectedGender,
+  ];
+
   _HomeState copyWith({
     SearchFormInput? searchFormInput,
     String? debouncedSearchValue,
     bool clearDebouncedValue = false,
+    DateTime? scrollToTopTimestamp,
+    CharacterStatus? selectedStatus,
+    bool clearSelectedStatus = false,
+    CharacterGender? selectedGender,
+    bool clearSelectedGender = false,
   }) {
     return _HomeState(
       searchFormInput: searchFormInput ?? this.searchFormInput,
       debouncedSearchValue: clearDebouncedValue
           ? null
           : debouncedSearchValue ?? this.debouncedSearchValue,
+      scrollToTopTimestamp: scrollToTopTimestamp ?? this.scrollToTopTimestamp,
+      selectedStatus:
+          clearSelectedStatus ? null : selectedStatus ?? this.selectedStatus,
+      selectedGender:
+          clearSelectedGender ? null : selectedGender ?? this.selectedGender,
     );
   }
 }

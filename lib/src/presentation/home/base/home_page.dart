@@ -12,9 +12,11 @@ part '../widgets/card/character_image.dart';
 part '../widgets/card/character_info.dart';
 
 part '../widgets/custom_app_bar.dart';
+part '../widgets/character_filters.dart';
 part '../constants/home_strings.dart';
 
 part 'listeners/seach_input_listener.dart';
+part 'listeners/character_filters_listener.dart';
 
 /// {@template home_page}
 /// A description for HomePage
@@ -52,7 +54,7 @@ class _HomeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiBlocListener(
-      listeners: [_SearchInputListener()],
+      listeners: [_SearchInputListener(), _CharacterFiltersListener()],
       child: const _HomeBody(),
     );
   }

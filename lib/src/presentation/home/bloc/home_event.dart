@@ -21,3 +21,19 @@ class _SearchDebounceCompleted extends _HomeEvent {
 
   final String value;
 }
+
+class _ScrollToTopRequested extends _HomeEvent {
+  const _ScrollToTopRequested();
+}
+
+class _StatusSelected extends _HomeEvent {
+  const _StatusSelected({this.status});
+
+  final CharacterStatus? status;
+}
+
+class _GenderSelected extends _HomeEvent {
+  const _GenderSelected({this.gender});
+
+  final CharacterGender? gender;
+}
