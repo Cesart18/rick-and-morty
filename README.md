@@ -10,17 +10,41 @@ A Flutter application that allows users to search and filter Rick and Morty char
 
 ### Steps
 
+1. **Clone the repository**
 ```bash
-# Clone the repository
-git clone <repository-url>
+git clone https://github.com/Cesart18/rick-and-morty.git
 cd rick_and_morty
+```
 
-# Install dependencies
+2. **Set up environment variables**
+
+Create a `.env` file in the root directory by copying the template:
+```bash
+cp .env.template .env
+```
+
+The `.env` file should contain:
+```
+API_URL=https://rickandmortyapi.com/api
+```
+
+> **Note**: The `.env.template` file is provided in the repository. Make sure to create your `.env` file before running the app.
+
+3. **Install dependencies**
+```bash
 flutter pub get
+```
 
-# Run the app
+4. **Run the app**
+```bash
 flutter run
 ```
+
+### Troubleshooting
+
+- If you get an error about missing `.env` file, make sure you created it in step 2
+- If the app doesn't load data, verify that the `API_URL` in your `.env` file is correct
+- For iOS: You may need to run `cd ios && pod install` before running the app
 
 ## Code Structure
 
