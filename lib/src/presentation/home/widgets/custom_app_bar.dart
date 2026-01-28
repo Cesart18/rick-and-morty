@@ -70,6 +70,8 @@ class _CustomAppBarState extends State<CustomAppBar>
         backgroundColor: ColorValues.bgPrimary(context),
         elevation: 0,
         titleSpacing: 0,
+        foregroundColor: ColorValues.textPrimary(context),
+        surfaceTintColor: ColorValues.bgPrimary(context),
         title: Padding(
           padding: EdgeInsets.symmetric(horizontal: WidthValues.spacingXl),
           child: Row(

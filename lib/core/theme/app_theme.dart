@@ -6,14 +6,10 @@ class AppTheme {
       useMaterial3: true,
       fontFamily: TextValues.fontFamily,
       textTheme: TextValues.textTheme(context),
-
-      // Colors
       primaryColor: ColorValues.primary,
       scaffoldBackgroundColor: ColorValues.tertiary,
       canvasColor: ColorValues.tertiary,
       dividerColor: ColorValues.secondary,
-
-      // Color Scheme
       colorScheme: const ColorScheme.light(
         primary: ColorValues.primary,
         secondary: ColorValues.secondary,
@@ -26,5 +22,3 @@ class AppTheme {
     );
   }
 }
-
-// class _CustomStyles {}

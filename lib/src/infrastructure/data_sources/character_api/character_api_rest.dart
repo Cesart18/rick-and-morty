@@ -31,7 +31,9 @@ class CharacterApiRest implements ICharacterApi {
     } on ServerError catch (e) {
       return Failure(e);
     } catch (e) {
-      return Failure(ServerError(message: 'Error inesperado: $e'));
+      return Failure(
+        ServerError(message: '${ErrorMessages.unexpectedError}: $e'),
+      );
     }
   }
 }

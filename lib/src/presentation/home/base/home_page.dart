@@ -1,13 +1,15 @@
 import 'package:rick_and_morty/core/foundation.dart';
 import 'package:rick_and_morty/core/ui.dart';
 import 'package:rick_and_morty/src/domain/domain.dart';
+import 'package:rick_and_morty/src/presentation/character_details/character_details.dart';
 
 part 'package:rick_and_morty/src/presentation/home/bloc/home_bloc.dart';
 part 'package:rick_and_morty/src/presentation/home/bloc/home_event.dart';
 part 'package:rick_and_morty/src/presentation/home/bloc/home_state.dart';
 
 part 'package:rick_and_morty/src/presentation/home/base/home_body.dart';
-part 'package:rick_and_morty/src/presentation/home/base/searched_body.dart';
+part 'package:rick_and_morty/src/presentation/home/base/characters_list.dart';
+part 'package:rick_and_morty/src/presentation/home/base/searched_characters_list.dart';
 part '../widgets/card/character_card.dart';
 part '../widgets/card/character_image.dart';
 part '../widgets/card/character_info.dart';
@@ -18,6 +20,7 @@ part '../widgets/app_bar/search_input.dart';
 part '../widgets/app_bar/search_inputs_row.dart';
 part '../widgets/app_bar/app_bar_search_toggle.dart';
 part '../widgets/character_filters.dart';
+part '../widgets/filtered_content_layout.dart';
 part '../constants/home_strings.dart';
 
 part 'listeners/seach_input_listener.dart';
@@ -62,16 +65,7 @@ class _HomeView extends StatelessWidget {
         _CharacterFiltersListener(),
         _SearchViewListener(),
       ],
-      child: BlocBuilder<_HomeBloc, _HomeState>(
-        buildWhen: (previous, current) =>
-            previous.isSearchViewActive != current.isSearchViewActive ||
-            previous.hasSearchContent != current.hasSearchContent,
-        builder: (context, state) {
-          final showSearchResults =
-              state.isSearchViewActive && state.hasSearchContent;
-          return showSearchResults ? const _SearchedBody() : const _HomeBody();
-        },
-      ),
+      child: const _HomeBody(),
     );
   }
 }

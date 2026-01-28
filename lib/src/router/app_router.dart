@@ -1,6 +1,7 @@
 import 'package:rick_and_morty/core/ui.dart';
+import 'package:rick_and_morty/src/domain/domain.dart';
+import 'package:rick_and_morty/src/presentation/character_details/character_details.dart';
 import 'package:rick_and_morty/src/presentation/home/home.dart';
-// ignore_for_file: lines_longer_than_80_chars
 
 /// {@template app_router}
 /// The root router for the app. Call [AppRouter.router] to get the router.
@@ -18,17 +19,25 @@ class AppRouter {
 
   static const String rootPath = '/';
 
-  /// The root router for the app. Set [debug] to true to enable debug logging
-  /// diagnostics.
-  static GoRouter router({bool debug = false}) => GoRouter(
+  /// The root router for the app. Singleton instance.
+  static final GoRouter _router = GoRouter(
     navigatorKey: rootNavigatorKey,
-    debugLogDiagnostics: debug,
     initialLocation: HomePage.path,
     routes: [
       GoRoute(
         path: HomePage.path,
         builder: (context, state) => const HomePage(),
       ),
+      GoRoute(
+        path: CharacterDetailsPage.path,
+        builder: (context, state) {
+          final character = state.extra! as Character;
+          return CharacterDetailsPage(character: character);
+        },
+      ),
     ],
   );
+
+  /// The root router for the app.
+  static GoRouter get router => _router;
 }

@@ -19,7 +19,7 @@ class App extends StatelessWidget {
         title: 'Rick and morty',
         theme: AppTheme.getTheme(context),
         debugShowCheckedModeBanner: false,
-        routerConfig: AppRouter.router(),
+        routerConfig: AppRouter.router,
       ),
     );
   }

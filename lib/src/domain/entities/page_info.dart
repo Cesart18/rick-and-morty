@@ -1,5 +1,5 @@
 class PageInfo<T> {
-  PageInfo({
+  const PageInfo({
     required this.count,
     required this.pages,
     required this.next,

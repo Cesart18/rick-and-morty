@@ -17,7 +17,6 @@ class SearchFormInput extends FormField<String, SearchFormInputError> {
 
   @override
   SearchFormInputError? validator(String value) {
-    // For search, we typically don't require validation
     return null;
   }
 }

@@ -1,7 +1,7 @@
 import 'package:rick_and_morty/src/domain/entities/entities.dart';
 
 class Character {
-  Character({
+  const Character({
     required this.id,
     required this.name,
     required this.image,
