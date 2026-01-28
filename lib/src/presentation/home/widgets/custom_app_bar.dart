@@ -14,10 +14,11 @@ class _CustomAppBarState extends State<CustomAppBar>
     with SingleTickerProviderStateMixin {
   late final AnimationController _controller;
   late final Animation<double> _animation;
-  final TextEditingController _searchController = TextEditingController();
-  final FocusNode _focusNode = FocusNode();
+  final FocusNode _nameFocusNode = FocusNode();
 
-  bool _isSearching = false;
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _speciesController = TextEditingController();
+  final TextEditingController _typeController = TextEditingController();
 
   @override
   void initState() {
@@ -32,109 +33,76 @@ class _CustomAppBarState extends State<CustomAppBar>
   @override
   void dispose() {
     _controller.dispose();
-    _searchController.dispose();
-    _focusNode.dispose();
+    _nameFocusNode.dispose();
+    _nameController.dispose();
+    _speciesController.dispose();
+    _typeController.dispose();
     super.dispose();
   }
 
+  void _onSearchStateChanged(bool isSearchViewActive) {
+    if (isSearchViewActive) {
+      final homeState = context.read<_HomeBloc>().state;
+      _nameController.text = homeState.nameInput;
+      _speciesController.text = homeState.speciesInput;
+      _typeController.text = homeState.typeInput;
+
+      _controller.forward();
+      _nameFocusNode.requestFocus();
+    } else {
+      _controller.reverse();
+      _nameFocusNode.unfocus();
+    }
+  }
+
   void _toggleSearch() {
-    setState(() {
-      _isSearching = !_isSearching;
-      if (_isSearching) {
-        _controller.forward();
-        _focusNode.requestFocus();
-      } else {
-        _controller.reverse();
-        _searchController.clear();
-        _focusNode.unfocus();
-      }
-    });
+    context.read<_HomeBloc>().add(const _SearchViewToggled());
   }
 
   @override
   Widget build(BuildContext context) {
-    return AppBar(
-      backgroundColor: ColorValues.bgPrimary(context),
-      elevation: 0,
-      titleSpacing: 0,
-      title: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: Row(
-          children: [
-            AnimatedBuilder(
-              animation: _animation,
-              builder: (context, child) {
-                return ClipRect(
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    widthFactor: 1.0 - _animation.value,
-                    child: Opacity(
-                      opacity: 1.0 - _animation.value,
-                      child: child,
-                    ),
-                  ),
-                );
-              },
-              child: GestureDetector(
-                onTap: () => context.read<_HomeBloc>().add(
-                  const _ScrollToTopRequested(),
-                ),
-                child: Text(
-                  _HomeStrings.appBarTitle,
-                  style: context.textTheme.titleLarge?.copyWith(
-                    color: ColorValues.textPrimary(context),
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
-            ),
-
-            Expanded(
-              child: AnimatedBuilder(
-                animation: _animation,
-                builder: (context, child) {
-                  return ClipRect(
-                    child: Align(
-                      alignment: Alignment.centerRight,
-                      widthFactor: _animation.value,
-                      child: Opacity(opacity: _animation.value, child: child),
-                    ),
-                  );
-                },
-                child: SizedBox(
-                  height: 40,
-                  child: CustomTextFormField(
-                    key: ValueKey(_isSearching),
-                    hintText: _HomeStrings.searchHint,
-                    focusNode: _focusNode,
-                    onChanged: (value) {
-                      context.read<_HomeBloc>().add(
-                        SearchFormInputChanged(
-                          searchFormInput: SearchFormInput.dirty(value),
-                        ),
-                      );
-                    },
+    return BlocListener<_HomeBloc, _HomeState>(
+      listenWhen: (previous, current) =>
+          previous.isSearchViewActive != current.isSearchViewActive,
+      listener: (context, state) =>
+          _onSearchStateChanged(state.isSearchViewActive),
+      child: AppBar(
+        backgroundColor: ColorValues.bgPrimary(context),
+        elevation: 0,
+        titleSpacing: 0,
+        title: Padding(
+          padding: EdgeInsets.symmetric(horizontal: WidthValues.spacingXl),
+          child: Row(
+            children: [
+              _AppBarTitle(animation: _animation),
+              Expanded(
+                child: AnimatedBuilder(
+                  animation: _animation,
+                  builder: (context, child) {
+                    return ClipRect(
+                      child: Align(
+                        alignment: Alignment.centerRight,
+                        widthFactor: _animation.value,
+                        child: Opacity(opacity: _animation.value, child: child),
+                      ),
+                    );
+                  },
+                  child: _SearchInputsRow(
+                    nameController: _nameController,
+                    speciesController: _speciesController,
+                    typeController: _typeController,
+                    nameFocusNode: _nameFocusNode,
                   ),
                 ),
               ),
-            ),
-          ],
-        ),
-      ),
-      actions: [
-        IconButton(
-          onPressed: _toggleSearch,
-          icon: AnimatedSwitcher(
-            duration: const Duration(milliseconds: 200),
-            child: Icon(
-              _isSearching ? Icons.close : Icons.search,
-              key: ValueKey(_isSearching),
-              color: ColorValues.primary,
-            ),
+            ],
           ),
         ),
-        Sizer.gap(WidthValues.spacingSm),
-      ],
+        actions: [
+          _AppBarSearchToggle(onPressed: _toggleSearch),
+          Sizer.gap(WidthValues.spacingSm),
+        ],
+      ),
     );
   }
 }

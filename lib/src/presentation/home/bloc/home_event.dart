@@ -7,19 +7,27 @@ abstract class _HomeEvent extends Equatable {
   List<Object?> get props => [];
 }
 
-class SearchFormInputChanged extends _HomeEvent {
-  const SearchFormInputChanged({required this.searchFormInput});
+class _NameInputChanged extends _HomeEvent {
+  const _NameInputChanged(this.value);
+  final String value;
+}
 
-  final SearchFormInput searchFormInput;
+class _SpeciesInputChanged extends _HomeEvent {
+  const _SpeciesInputChanged(this.value);
+  final String value;
+}
 
-  @override
-  List<Object?> get props => [searchFormInput];
+class _TypeInputChanged extends _HomeEvent {
+  const _TypeInputChanged(this.value);
+  final String value;
 }
 
 class _SearchDebounceCompleted extends _HomeEvent {
-  const _SearchDebounceCompleted(this.value);
+  const _SearchDebounceCompleted({this.name, this.species, this.type});
 
-  final String value;
+  final String? name;
+  final String? species;
+  final String? type;
 }
 
 class _ScrollToTopRequested extends _HomeEvent {
@@ -36,4 +44,16 @@ class _GenderSelected extends _HomeEvent {
   const _GenderSelected({this.gender});
 
   final CharacterGender? gender;
+}
+
+class _SearchCleared extends _HomeEvent {
+  const _SearchCleared();
+}
+
+class _FiltersCleared extends _HomeEvent {
+  const _FiltersCleared();
+}
+
+class _SearchViewToggled extends _HomeEvent {
+  const _SearchViewToggled();
 }

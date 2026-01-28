@@ -70,7 +70,7 @@ class ErrorHandler {
   }
 
   ServerError _cancelError() {
-    return const ServerError(message: 'Solicitud cancelada');
+    return const ServerError(message: 'Request cancelled');
   }
 
   ServerError _certificateError() {

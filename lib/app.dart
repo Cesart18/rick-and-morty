@@ -36,5 +36,12 @@ List<SingleChildWidget> _dependencies(Config config) {
         ),
       ),
     ),
+    BlocProvider(
+      create: (context) => SearchedCharacteresBloc(
+        useCase: GetCharactersUseCase(
+          characterRepository: config.characterRepository,
+        ),
+      ),
+    ),
   ];
 }

@@ -7,16 +7,22 @@ part 'package:rick_and_morty/src/presentation/home/bloc/home_event.dart';
 part 'package:rick_and_morty/src/presentation/home/bloc/home_state.dart';
 
 part 'package:rick_and_morty/src/presentation/home/base/home_body.dart';
+part 'package:rick_and_morty/src/presentation/home/base/searched_body.dart';
 part '../widgets/card/character_card.dart';
 part '../widgets/card/character_image.dart';
 part '../widgets/card/character_info.dart';
 
 part '../widgets/custom_app_bar.dart';
+part '../widgets/app_bar/app_bar_title.dart';
+part '../widgets/app_bar/search_input.dart';
+part '../widgets/app_bar/search_inputs_row.dart';
+part '../widgets/app_bar/app_bar_search_toggle.dart';
 part '../widgets/character_filters.dart';
 part '../constants/home_strings.dart';
 
 part 'listeners/seach_input_listener.dart';
 part 'listeners/character_filters_listener.dart';
+part 'listeners/search_view_listener.dart';
 
 /// {@template home_page}
 /// A description for HomePage
@@ -41,12 +47,9 @@ class HomePage extends StatelessWidget {
   }
 }
 
-// NOTE: Declare all BlocListeners of Home here to handle navigation,
-// showing dialogs, etc.
 /// {@template home_view}
 /// Displays the Body of HomeView
 /// {@endtemplate}
-///
 class _HomeView extends StatelessWidget {
   /// {@macro home_view}
   const _HomeView();
@@ -54,8 +57,21 @@ class _HomeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiBlocListener(
-      listeners: [_SearchInputListener(), _CharacterFiltersListener()],
-      child: const _HomeBody(),
+      listeners: [
+        _SearchInputListener(),
+        _CharacterFiltersListener(),
+        _SearchViewListener(),
+      ],
+      child: BlocBuilder<_HomeBloc, _HomeState>(
+        buildWhen: (previous, current) =>
+            previous.isSearchViewActive != current.isSearchViewActive ||
+            previous.hasSearchContent != current.hasSearchContent,
+        builder: (context, state) {
+          final showSearchResults =
+              state.isSearchViewActive && state.hasSearchContent;
+          return showSearchResults ? const _SearchedBody() : const _HomeBody();
+        },
+      ),
     );
   }
 }

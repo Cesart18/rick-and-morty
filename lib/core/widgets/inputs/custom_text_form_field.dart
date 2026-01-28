@@ -3,19 +3,23 @@ import 'package:rick_and_morty/core/ui.dart';
 class CustomTextFormField extends StatelessWidget {
   const CustomTextFormField({
     super.key,
+    this.controller,
     this.onChanged,
     this.hintText,
     this.suffixIcon,
     this.focusNode,
   });
 
+  final TextEditingController? controller;
   final void Function(String)? onChanged;
   final String? hintText;
   final Widget? suffixIcon;
   final FocusNode? focusNode;
+
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      controller: controller,
       focusNode: focusNode,
       onTapOutside: (_) => FocusScope.of(context).unfocus(),
       onChanged: onChanged,

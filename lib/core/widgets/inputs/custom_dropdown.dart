@@ -32,6 +32,7 @@ class CustomDropdown<T> extends StatelessWidget {
     ];
 
     return DropdownMenu<T?>(
+      key: value == null ? UniqueKey() : ValueKey(value),
       initialSelection: value,
       expandedInsets: EdgeInsets.zero,
       hintText: hintText,

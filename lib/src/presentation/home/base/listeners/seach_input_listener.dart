@@ -4,16 +4,21 @@ class _SearchInputListener extends BlocListener<_HomeBloc, _HomeState> {
   _SearchInputListener()
     : super(
         listenWhen: (previous, current) =>
-            previous.debouncedSearchValue != current.debouncedSearchValue,
+            previous.debouncedName != current.debouncedName ||
+            previous.debouncedSpecies != current.debouncedSpecies ||
+            previous.debouncedType != current.debouncedType,
         listener: (context, state) {
-          final searchValue = state.debouncedSearchValue;
-          if (searchValue == null) return;
+          if (!state.hasSearchContent) return;
 
-          // context.read<SearchedCharacteresBloc>().add(
-          //   SearchCharacters(query: searchValue),
-          // );
-
-          // TODO: call the bloc to search the characters
+          context.read<SearchedCharacteresBloc>().add(
+            SearchedCharactersNextPageRequested(
+              name: state.debouncedName,
+              species: state.debouncedSpecies,
+              type: state.debouncedType,
+              status: state.selectedStatus,
+              gender: state.selectedGender,
+            ),
+          );
         },
       );
 }

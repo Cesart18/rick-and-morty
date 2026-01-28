@@ -26,7 +26,7 @@ class CharactersBloc extends Bloc<CharactersEvent, CharactersState> {
   GetCharactersParams _currentParams = GetCharactersParams();
 
   void _cancelCurrentRequest() {
-    _cancelToken?.cancel('Nueva búsqueda iniciada');
+    _cancelToken?.cancel(HttpConstants.cancelRequestMessage);
     _cancelToken = CancelToken();
   }
 
@@ -57,8 +57,8 @@ class CharactersBloc extends Bloc<CharactersEvent, CharactersState> {
     );
 
     final loadingStatus = state.characters.isEmpty || filtersChanged
-        ? CharactersStatus.waiting
-        : CharactersStatus.waitingMore;
+        ? PaginatedDataStatus.waiting
+        : PaginatedDataStatus.waitingMore;
 
     emit(state.copyWith(status: loadingStatus));
 
@@ -92,7 +92,7 @@ class CharactersBloc extends Bloc<CharactersEvent, CharactersState> {
 
         emit(
           state.copyWith(
-            status: CharactersStatus.loaded,
+            status: PaginatedDataStatus.loaded,
             characters: newCharacters,
             currentPage: params.page ?? 1,
             totalPages: pageInfo.pages,
@@ -100,9 +100,14 @@ class CharactersBloc extends Bloc<CharactersEvent, CharactersState> {
         );
       },
       (error) {
-        if (error.message?.contains('cancelada') ?? false) return;
+        if (error.message?.contains(
+              HttpConstants.cancelledErrorMessage,
+            ) ??
+            false) {
+          return;
+        }
 
-        emit(state.copyWith(status: CharactersStatus.failure));
+        emit(state.copyWith(status: PaginatedDataStatus.failure));
       },
     );
   }

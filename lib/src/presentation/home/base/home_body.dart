@@ -1,6 +1,5 @@
 part of 'package:rick_and_morty/src/presentation/home/base/home_page.dart';
 
-// NOTE: Declare all the UI widgets here, including BlocBuilders.
 /// {@template home_body}
 /// Body of the HomePage.
 /// {@endtemplate}
@@ -73,10 +72,11 @@ class _HomeBodyState extends State<_HomeBody> {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: WidthValues.spacingLg),
       child: Column(
-        spacing: WidthValues.spacing2xl,
         children: [
+          Sizer.gap(WidthValues.spacingMd),
           const _CharacterFilters(),
 
+          Sizer.gap(WidthValues.spacingXl),
           Expanded(
             child: BlocListener<_HomeBloc, _HomeState>(
               listenWhen: (previous, current) =>
@@ -123,15 +123,17 @@ class _HomeBodyState extends State<_HomeBody> {
                       ),
 
                       if (state.status.isWaitingMore)
-                        const SliverToBoxAdapter(
+                        SliverToBoxAdapter(
                           child: Padding(
-                            padding: EdgeInsets.symmetric(vertical: 16),
+                            padding: EdgeInsets.symmetric(
+                              vertical: WidthValues.spacingXl,
+                            ),
                             child: Center(
                               child: SizedBox(
-                                width: 24,
-                                height: 24,
+                                width: WidthValues.spacing9xl,
+                                height: WidthValues.spacing9xl,
                                 child: CircularProgressIndicator(
-                                  strokeWidth: 2,
+                                  strokeWidth: WidthValues.spacingMd,
                                 ),
                               ),
                             ),

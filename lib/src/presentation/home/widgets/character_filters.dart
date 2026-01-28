@@ -8,6 +8,8 @@ class _CharacterFilters extends StatelessWidget {
     final homeState = context.watch<_HomeBloc>().state;
     final selectedStatus = homeState.selectedStatus;
     final selectedGender = homeState.selectedGender;
+    final hasFilters = selectedStatus != null || selectedGender != null;
+
     return Row(
       spacing: WidthValues.spacingMd,
       children: [
@@ -37,6 +39,18 @@ class _CharacterFilters extends StatelessWidget {
             },
           ),
         ),
+        if (hasFilters)
+          TextButton(
+            onPressed: () {
+              context.read<_HomeBloc>().add(const _FiltersCleared());
+            },
+            child: Text(
+              _HomeStrings.clearFilters,
+              style: context.appTextStyles.textSm.copyWith(
+                color: ColorValues.primary,
+              ),
+            ),
+          ),
       ],
     );
   }
