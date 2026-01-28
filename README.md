@@ -2,29 +2,10 @@
 
 A Flutter application that allows users to search and filter Rick and Morty characters using the [Rick and Morty API](https://rickandmortyapi.com/).
 
-## 📱 Screenshots & Demo
-
-### Demo Video
-
-https://github.com/user-attachments/assets/YOUR-VIDEO-ID-HERE
-
-> **How to add the demo video**: 
-> 1. Go to https://github.com/Cesart18/rick-and-morty
-> 2. Click on this README.md file
-> 3. Click the "Edit" button (pencil icon in the top right)
-> 4. In the editor, locate the line `https://github.com/user-attachments/assets/YOUR-VIDEO-ID-HERE`
-> 5. Drag and drop your video file (`Screen Recording 2026-01-27 at 11.26.50 PM.mov` from the `assets/public` folder on your computer) right below that line
-> 6. Wait for GitHub to upload it - it will generate a URL automatically
-> 7. Delete the `YOUR-VIDEO-ID-HERE` placeholder line
-> 8. Commit the changes
->
-> **Note**: The video file is too large (100MB+) to include in the git repository, so it needs to be uploaded directly through GitHub's interface.
-
 ### Screenshots
+<img width="524" height="1040" alt="image" src="https://github.com/user-attachments/assets/f7a64a80-da3a-4f23-9148-af138fad6f00" />
 
-<div align="center">
-  <img src="assets/public/Screenshot 2026-01-27 at 11.30.05 PM.png" alt="Rick and Morty App Screenshot" width="600"/>
-</div>
+
 
 ## How to Run
 
